@@ -1,0 +1,84 @@
+{
+  "aliases": [
+    {
+      "pattern": "^hr$|^hit ratio$|^hit rate$",
+      "values": ["hr", "hit ratio", "hit rate"]
+    },
+    {
+      "pattern": "^mrr$|mean reciprocal rank",
+      "values": ["mrr", "mean reciprocal rank"]
+    },
+    {
+      "pattern": "^ndcg$|normalized discounted cumulative gain",
+      "values": ["ndcg", "normalized discounted cumulative gain"]
+    },
+    {
+      "pattern": "^asw$|average silhouette width|silhouette width|silhouette score",
+      "values": ["asw", "average silhouette width", "silhouette width", "silhouette score"]
+    },
+    {
+      "pattern": "^avgbio$|^average bio$|avgbio",
+      "values": ["avgbio", "average bio", "avg bio"]
+    },
+    {
+      "pattern": "^nmi$|normalized mutual information",
+      "values": ["nmi", "normalized mutual information"]
+    },
+    {
+      "pattern": "^ari$|adjusted rand index",
+      "values": ["ari", "adjusted rand index"]
+    },
+    {
+      "pattern": "^pcr$|principal component regression",
+      "values": ["pcr", "principal component regression", "pcr score"]
+    },
+    {
+      "pattern": "^anls$|average normalized levenshtein similarity",
+      "values": ["anls", "average normalized levenshtein similarity", "normalized levenshtein similarity"]
+    },
+    {
+      "pattern": "^aar$|amino acid recovery",
+      "values": ["aar", "amino acid recovery"]
+    },
+    {
+      "pattern": "^auc$|area under curve",
+      "values": ["auc", "area under curve"]
+    },
+    {
+      "pattern": "^ml 1m$|^ml-1m$|movielens 1m",
+      "values": ["ml-1m", "ml 1m", "movielens 1m", "movie lens 1m"]
+    },
+    {
+      "pattern": "^ml 20m$|^ml-20m$|movielens 20m",
+      "values": ["ml-20m", "ml 20m", "movielens 20m", "movie lens 20m"]
+    },
+    {
+      "pattern": "^movielens$|movie lens|^ml$",
+      "values": ["movielens", "movie lens", "ml-1m", "ml-20m", "ml 1m", "ml 20m"]
+    },
+    {
+      "pattern": "^github$|^git hub$",
+      "values": ["github", "git hub"]
+    },
+    {
+      "pattern": "amazon sports|sports and outdoors|^sports$",
+      "values": ["amazon sports", "sports", "sports and outdoors"]
+    },
+    {
+      "pattern": "^pbmc 12k$|^pbmc$|pbmc",
+      "values": ["pbmc", "pbmc 12k", "pbmc (12k)", "pbmc12k"]
+    },
+    {
+      "pattern": "^pancreas 12k$|^pancreas$",
+      "values": ["pancreas", "pancreas 12k", "pancreas (12k)", "pancreas12k"]
+    },
+    {
+      "pattern": "blood and bone marrow|bone marrow",
+      "values": ["blood and bone marrow", "bone marrow", "blood marrow"]
+    },
+    {
+      "pattern": "^hie|affinity maturation",
+      "values": ["hie", "affinity maturation", "ab affinity maturation", "7 antibodies"]
+    }
+  ]
+}

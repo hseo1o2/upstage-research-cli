@@ -1,0 +1,36 @@
+{
+  "name": "regression-public-hardening-v10",
+  "paperDir": "tmp/papers-public-hardening-valid",
+  "papers": [
+    "AntiFold-2405.03370.pdf",
+    "BERT4Rec-1904.06690.pdf",
+    "ChartQA-2203.10244.pdf",
+    "DocVQA-2007.00398.pdf",
+    "GRU4Rec-1511.06939.pdf",
+    "ProGen2-2206.13517.pdf",
+    "S3Rec-2008.07873.pdf",
+    "SASRec-1808.09781.pdf",
+    "TextVQA-1904.08920.pdf",
+    "ZeroShotSCFM-s13059-025-03574-x.pdf"
+  ],
+  "mode": "both",
+  "context": "I want to compare reusable methodology patterns across experimental papers without assuming one fixed domain, and I want evaluation artifacts that preserve the paper-specific metrics, baselines, and datasets as closely as possible.",
+  "golden": {
+    "evalSummary": "fixtures/regression/public-hardening-v10.eval.tsv",
+    "analyzeSummary": "fixtures/regression/public-hardening-v10.analyze.tsv"
+  },
+  "thresholds": {
+    "eval": {
+      "minCompileOk": 10,
+      "minRunOk": 10,
+      "maxManualReviewItems": 0,
+      "maxTodoMentions": 0,
+      "minVerificationScore": "4/4"
+    },
+    "analyze": {
+      "expectedBatches": 2,
+      "minApplicationPointsPerBatch": 8,
+      "minEvidenceRefsPerBatch": 3
+    }
+  }
+}

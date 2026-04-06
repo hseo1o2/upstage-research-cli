@@ -1,0 +1,86 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task_type",
+    "evaluation_metrics",
+    "datasets",
+    "baselines",
+    "implementation_details"
+  ],
+  "properties": {
+    "task_type": {
+      "type": "string",
+      "description": "Research task type, such as translation, object detection, recommendation, or forecasting."
+    },
+    "evaluation_metrics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "formula",
+          "value"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Metric name."
+          },
+          "formula": {
+            "type": "string",
+            "description": "Formula or scoring definition if stated."
+          },
+          "value": {
+            "type": [
+              "number",
+              "string",
+              "null"
+            ],
+            "description": "Reported metric value from the paper."
+          }
+        }
+      }
+    },
+    "datasets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Datasets used in the experimental section."
+    },
+    "baselines": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "model_name",
+          "scores"
+        ],
+        "properties": {
+          "model_name": {
+            "type": "string",
+            "description": "Baseline model name."
+          },
+          "scores": {
+            "type": "object",
+            "description": "Metric name to score map for the baseline.",
+            "additionalProperties": {
+              "type": [
+                "number",
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "implementation_details": {
+      "type": "string",
+      "description": "Implementation notes that matter for evaluation or reproduction."
+    }
+  }
+}

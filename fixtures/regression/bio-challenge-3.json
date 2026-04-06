@@ -1,0 +1,25 @@
+{
+  "name": "bio-challenge-3",
+  "paperDir": "tmp/papers-bio-verified",
+  "papers": [
+    "Fold2Seq-2107-pmlr.pdf",
+    "IsEM-Pro-2023-pmlr.pdf",
+    "ORDC-2023-pmlr.pdf"
+  ],
+  "mode": "both",
+  "context": "I want a challenge regression set for protein design and protein structure generation papers with protocol-heavy metrics such as sequence recovery, novelty and diversity, pLDDT, scTM, and TM-score. This set is for generalization tracking, not release gating.",
+  "thresholds": {
+    "eval": {
+      "minCompileOk": 3,
+      "minRunOk": 3,
+      "maxManualReviewItems": 12,
+      "maxTodoMentions": 12,
+      "minVerificationScore": "2/4"
+    },
+    "analyze": {
+      "expectedBatches": 1,
+      "minApplicationPointsPerBatch": 4,
+      "minEvidenceRefsPerBatch": 2
+    }
+  }
+}

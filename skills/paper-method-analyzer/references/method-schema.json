@@ -1,0 +1,49 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "title",
+    "model_architecture",
+    "training_strategy",
+    "datasets",
+    "main_contribution",
+    "limitations",
+    "evaluation_metrics"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Full paper title."
+    },
+    "model_architecture": {
+      "type": "string",
+      "description": "Core model design or architecture."
+    },
+    "training_strategy": {
+      "type": "string",
+      "description": "Optimization, pretraining, fine-tuning, or curriculum strategy."
+    },
+    "datasets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Datasets used in the paper."
+    },
+    "main_contribution": {
+      "type": "string",
+      "description": "Primary contribution claimed by the authors."
+    },
+    "limitations": {
+      "type": "string",
+      "description": "Explicitly stated or strongly evidenced limitations."
+    },
+    "evaluation_metrics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Reported evaluation metrics."
+    }
+  }
+}

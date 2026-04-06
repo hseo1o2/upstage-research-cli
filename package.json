@@ -1,0 +1,45 @@
+{
+  "name": "upstage-research-cli",
+  "version": "0.1.0",
+  "description": "Research-paper-focused Upstage CLI with agent skills for methodology analysis and evaluation code generation.",
+  "bin": {
+    "upstage-research": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "config/**/*.json",
+    "fixtures/regression/**/*",
+    "skills/**/*.md",
+    "skills/**/*.json",
+    "skills/**/*.py",
+    "README.md"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "tsc -p tsconfig.json",
+    "check": "tsc --noEmit -p tsconfig.json",
+    "regression:batch": "node dist/cli.js regression-batch",
+    "regression:public-hardening": "node dist/cli.js regression-batch --manifest fixtures/regression/public-hardening-v10.json --out-dir tmp/regression-public-hardening-ci",
+    "regression:public-hardening:assert": "node dist/cli.js regression-batch --manifest fixtures/regression/public-hardening-v10.json --out-dir tmp/regression-public-hardening-ci --assert",
+    "prepack": "npm run build"
+  },
+  "keywords": [
+    "upstage",
+    "cli",
+    "research",
+    "papers",
+    "skills",
+    "agent-skills"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "commander": "^14.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "typescript": "^5.9.2"
+  }
+}

@@ -1,0 +1,11 @@
+paper	compile	run	manual_review_items	todo_mentions	verification_score	metric_fidelity	dataset_fidelity	baseline_fidelity	evidence_fidelity	protocol_fidelity	resumed	error
+AntiFold-2405.03370	ok	ok	0	0	4/4	1.000	0.667	1.000	1.000	1.000	no	
+BERT4Rec-1904.06690	ok	ok	0	0	4/4	1.000	1.000	1.000	1.000	1.000	no	
+ChartQA-2203.10244	ok	ok	0	0	4/4	1.000	1.000	1.000	1.000	1.000	no	
+DocVQA-2007.00398	ok	ok	0	0	4/4	1.000	1.000	1.000	1.000	1.000	no	
+GRU4Rec-1511.06939	ok	ok	0	0	4/4	1.000	1.000	1.000	1.000	1.000	no	
+ProGen2-2206.13517	ok	ok	0	0	4/4	1.000	1.000	1.000	1.000	1.000	no	
+S3Rec-2008.07873	ok	ok	0	0	4/4	1.000	0.500	1.000	1.000	1.000	no	
+SASRec-1808.09781	ok	ok	0	0	4/4	1.000	1.000	1.000	1.000	1.000	no	
+TextVQA-1904.08920	ok	ok	0	0	4/4	1.000	1.000	0.875	1.000	1.000	no	
+ZeroShotSCFM-s13059-025-03574-x	ok	ok	0	0	4/4	1.000	0.714	1.000	1.000	1.000	no	

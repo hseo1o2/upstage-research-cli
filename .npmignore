@@ -1,0 +1,5 @@
+.claude/
+.npm-cache/
+tmp/
+skills/**/__pycache__/
+*.pyc

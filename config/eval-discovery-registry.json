@@ -1,0 +1,67 @@
+{
+  "taskModeRules": [
+    {
+      "mode": "ranking",
+      "pattern": "(ndcg|mrr|hit@|hr@|precision@|recall@|pass@|top[- ]?k|ranking|retrieval)"
+    },
+    {
+      "mode": "pairwise_preference",
+      "pattern": "(preference|pairwise|bradley|win rate|arena)"
+    },
+    {
+      "mode": "forecasting",
+      "pattern": "(forecast|forecasting|time series|temporal|rmse|mse|mae|mape|smape|mase|dtw)"
+    },
+    {
+      "mode": "classification",
+      "pattern": "(classification|sentiment|intent|nli|label)"
+    }
+  ],
+  "domainRules": [
+    {
+      "domain": "graph",
+      "pattern": "\\b(graph|subgraph|node|edge)\\b|knowledge graph|textual graph"
+    },
+    {
+      "domain": "bioinformatics",
+      "pattern": "(protein|antibody|amino acid|residue|paratope|epitope|binding affinity|structure prediction|structure evaluation|folding|pdb|alphafold|rosetta|tm-score|gdt|lddt|rmsd|bioinformatics|genomic|proteomic|single-cell|single cell|rna-seq|rna seq|transcriptom|cell type|batch integration|pbmc|tabula sapiens|pancreas|kidney|bone marrow|geneformer|scgpt)"
+    },
+    {
+      "domain": "nlp",
+      "pattern": "(translation|summarization|classification|retrieval|search|citation|multilingual|qa|question answering|text|language model|llm|rouge|bleu|bertscore|hallucination|factual|claim|reference-based|nli|entailment|contradiction|neutral)"
+    },
+    {
+      "domain": "cv",
+      "pattern": "(image|vision|object detection|semantic segmentation|instance segmentation|coco|imagenet|miou|fid|psnr|ssim)"
+    },
+    {
+      "domain": "rl",
+      "pattern": "(reinforcement|policy|reward|gym|episode|return)"
+    },
+    {
+      "domain": "time-series",
+      "pattern": "(time series|forecast|forecasting|anomaly|temporal|multivariate|univariate|long-term|ett[h|m]?1|ett[h|m]?2|ecl|weather|traffic|exchange|ili|mae|mase|smape|rmse|mse|dtw)"
+    },
+    {
+      "domain": "recommendation",
+      "pattern": "(recommendation|recommender|sequential recommendation|collaborative filtering|user-item|click-through|ctr\\b)"
+    }
+  ],
+  "domainFallbackRules": [
+    {
+      "domain": "recommendation",
+      "pattern": "(ndcg|hit rate|hit@|hr@|mrr\\b)",
+      "requires": "(recommend|user|item|session|click|movie|retail|catalog)"
+    }
+  ],
+  "libraryHints": {
+    "bioinformatics": "biopython, biotite, mdtraj",
+    "graph": "networkx, torch_geometric",
+    "nlp": "evaluate, nltk, sacrebleu",
+    "cv": "torchmetrics, pycocotools",
+    "rl": "gymnasium",
+    "recommendation": "recbole",
+    "time-series": "tsmetric",
+    "general": "numpy, pandas"
+  }
+}
