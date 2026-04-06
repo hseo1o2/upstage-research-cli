@@ -1,87 +1,214 @@
 # upstage-research-cli
 
-`upstage-research-cli` is a Node.js CLI for research-paper workflows powered by Upstage APIs. It ships with two Agent Skills that turn paper PDFs into structured methodology analysis or evaluation-code generation.
+`upstage-research-cli` is a bilingual research-paper CLI built on Upstage APIs.
+It ships with two bundled Agent Skills:
 
-## What it does
+- `paper-method-analyzer`
+- `paper-eval-codegen`
 
-- `analyze-methods`: compares multiple papers and suggests how to apply them to the user's own research.
-- `eval-codegen`: extracts experiment details from one paper and generates runnable evaluation code, a reproduction checklist, and an optional LLM-as-judge prompt.
-- `install --skills`: saves the API key if needed and installs both skills into `.claude/skills/upstage-research` for the current project.
-- `install --skills`: saves the API key if needed and installs the skill bundle into one or more agent-specific project paths such as Claude, Codex, or Cursor.
-- `regression-batch`: reruns `eval-codegen` and `analyze-methods` over a paper directory and writes batch summaries for regression tracking.
-- `cache-clear`: clears the local parse / extraction / Solar cache when you need to invalidate stale artifacts.
+The package is published on npm as [`upstage-research-cli`](https://www.npmjs.com/package/upstage-research-cli).
 
-## Why Upstage Document Parse
+---
 
-Academic PDFs are layout-heavy. Two-column pages, equations, algorithm boxes, and dense result tables are where generic PDF parsers collapse. This project uses Upstage Document Parse first so the downstream extraction and generation steps start from structure-preserving markdown instead of flattened text.
+## 한국어 소개
 
-## Project layout
+`upstage-research-cli`는 논문 PDF를 바로 연구 실행 흐름으로 연결하기 위한 CLI입니다.
 
-```text
-upstage-research-cli/
-├── config/
-│   ├── eval-discovery-registry.json
-│   ├── evidence-alias-registry.json
-│   └── metric-kind-registry.json
-├── fixtures/
-│   └── regression/
-│       ├── bio-challenge-3.json
-│       ├── public-hardening-v10.json
-│       ├── public-hardening-v10.eval.tsv
-│       ├── public-hardening-v10.analyze.tsv
-│       └── release-gate-main-47.json
-├── skills/
-│   ├── paper-method-analyzer/
-│   │   ├── SKILL.md
-│   │   ├── scripts/
-│   │   │   └── analyze.py
-│   │   └── references/
-│   │       └── method-schema.json
-│   └── paper-eval-codegen/
-│       ├── SKILL.md
-│       ├── scripts/
-│       │   ├── parse_experiments.py
-│       │   └── generate_eval.py
-│       └── references/
-│           ├── eval-schema.json
-│           ├── metrics-by-domain.md
-│           └── prompt-templates.md
-├── src/
-│   ├── cli.ts
-│   ├── client.ts
-│   ├── config.ts
-│   └── commands/
-│       ├── analyze-methods.ts
-│       ├── eval-codegen.ts
-│       └── install.ts
-├── package.json
-├── tsconfig.json
-└── README.md
+핵심은 단순 요약이 아닙니다.
+
+- 여러 논문을 비교해서 방법론을 정리하고
+- 한 논문의 실험 섹션을 읽어 평가 코드를 만들고
+- 그 결과를 Agent Skill로 Claude, Codex, Cursor 같은 에이전트 환경에 설치할 수 있게 하는 것
+
+### 포함된 스킬
+
+#### 1. `paper-method-analyzer`
+
+여러 논문 PDF를 비교 분석해서:
+
+- 방법론 비교표
+- 논문별 핵심 기여 / 한계 / 데이터셋 / 평가 지표
+- 내 연구에 적용 가능한 포인트
+- 참고 우선순위
+
+를 생성합니다.
+
+#### 2. `paper-eval-codegen`
+
+한 논문의 실험 섹션을 읽고:
+
+- 실행 가능한 평가 코드
+- 재현 체크리스트
+- baseline snapshot
+- evidence snippet
+- optional LLM-as-judge prompt
+
+를 생성합니다.
+
+### 왜 Upstage 기반인가
+
+학술 논문 PDF는 일반 PDF 파서로 깨지기 쉽습니다.
+
+- 2단 레이아웃
+- 수식
+- 알고리즘 박스
+- 압축된 결과 테이블
+
+이 프로젝트는 Upstage Document Parse를 먼저 사용해서, 이런 구조를 최대한 보존한 markdown을 기반으로 후속 추출과 생성을 진행합니다.
+
+### 현재 상태
+
+- `paper-method-analyzer`: 실사용 가능
+- `paper-eval-codegen`: 일반 experimental paper 기준 강한 실사용 단계
+- `protein design / structure generation` 같이 protocol-heavy metric이 많은 논문은 별도 challenge 영역으로 분리해 추적 중
+
+### 설치
+
+전역 설치:
+
+```bash
+npm install -g upstage-research-cli
 ```
 
-## Install
+로컬 개발 설치:
 
 ```bash
 npm install
 npm run build
 ```
 
-The CLI binary is:
+### 인증
+
+API 키 우선순위:
+
+1. `UPSTAGE_API_KEY`
+2. `~/.config/upstage-research/config.json`
+
+스킬 설치 시 키가 없으면 저장을 유도합니다.
+
+### 빠른 시작
+
+논문 방법론 비교:
+
+```bash
+upstage-research analyze-methods paper1.pdf paper2.pdf \
+  --context "나는 transformer 기반 시계열 이상탐지 연구를 하고 있다"
+```
+
+평가 코드 생성:
+
+```bash
+upstage-research eval-codegen paper.pdf \
+  --lang python \
+  --framework pytorch \
+  --include-prompt
+```
+
+스킬 설치:
+
+```bash
+upstage-research install --skills
+```
+
+Claude / Codex / Cursor용으로 함께 설치:
+
+```bash
+upstage-research install --skills --all-targets
+```
+
+### 주요 기능
+
+- Upstage `Document Parse -> Information Extract -> Solar` 파이프라인
+- evidence snippet + provenance 기반 결과 추적
+- deterministic evaluation artifact rendering
+- metric / dataset / baseline / evidence / protocol verification
+- cache, retry, async parse fallback
+- regression batch / release gate / challenge set 지원
+
+---
+
+## English Overview
+
+`upstage-research-cli` is a research-paper workflow CLI built on Upstage APIs.
+It is designed for papers with real experiment sections, not generic PDF summarization.
+
+The tool turns academic PDFs into:
+
+- grounded methodology comparisons
+- reproducible evaluation artifacts
+- bundled Agent Skills for coding agents
+
+### Bundled skills
+
+#### 1. `paper-method-analyzer`
+
+Compares multiple paper PDFs and produces:
+
+- a methodology comparison table
+- per-paper summaries
+- evidence-backed application suggestions
+- reading priority across the provided papers
+
+#### 2. `paper-eval-codegen`
+
+Reads one paper's experiment section and produces:
+
+- runnable evaluation code
+- a reproduction checklist
+- a baseline snapshot
+- evidence snippets with provenance
+- an optional LLM-as-judge prompt
+
+### Why this tool uses Upstage first
+
+Academic PDFs are structurally hostile to generic parsers.
+
+- two-column layouts
+- tables with compressed headers
+- equations inside narrative sections
+- algorithm boxes and structured figure/table captions
+
+This project starts with Upstage Document Parse so downstream extraction and generation can work from structure-preserving markdown instead of flattened text.
+
+### Current quality position
+
+- `paper-method-analyzer`: production-usable
+- `paper-eval-codegen`: strong for mainstream experimental papers
+- protein-design / structure-generation papers remain tracked in a separate challenge lane because they often require protocol-heavy evaluators or external scoring tools
+
+---
+
+## Install
+
+Global install:
+
+```bash
+npm install -g upstage-research-cli
+```
+
+Local build:
+
+```bash
+npm install
+npm run build
+```
+
+CLI binary:
 
 ```bash
 upstage-research
 ```
 
-If you install globally from the package output, the `bin` entry points to `dist/cli.js`.
+---
 
 ## Authentication
 
-The CLI resolves the API key in this order:
+The CLI resolves the Upstage API key in this order:
 
 1. `UPSTAGE_API_KEY`
 2. `~/.config/upstage-research/config.json`
 
-`upstage-research install --skills` prompts for the key only when the environment variable is missing, then saves it to the config file.
+---
 
 ## Commands
 
@@ -94,19 +221,20 @@ upstage-research analyze-methods paper1.pdf paper2.pdf \
   --save-report tmp/method-analysis.md
 ```
 
-Stdout is markdown with:
+Output includes:
 
-- A comparison table
-- Per-paper analysis
-- Evidence snippets pulled from the parsed paper text, with stable snippet ids plus page/section/anchor provenance when available
-- Application suggestions
-- Reference priority
+- comparison table
+- per-paper analysis
+- evidence snippets
+- application suggestions
+- reference priority
 
 Useful options:
 
-- `--format json` for machine-readable output
-- `--out` or `--save-report` to persist the rendered report
-- `--cache-only` to fail on cache misses instead of calling Upstage APIs
+- `--format json`
+- `--out`
+- `--save-report`
+- `--cache-only`
 
 ### Generate evaluation code
 
@@ -120,58 +248,46 @@ upstage-research eval-codegen paper.pdf \
   --save-report tmp/eval.md
 ```
 
-Stdout is markdown with:
+Output includes:
 
-- Runnable evaluation code
-- A reproduction checklist
-- A verification report that scores metric coverage, evidence grounding, and protocol risk
-- A reported-metrics table
-- A baseline snapshot
-- Evidence snippets from the experiment section, with stable snippet ids plus page/section/anchor provenance when available
-- An optional LLM-as-judge prompt
- - Verification subscores for metric, dataset, baseline, evidence, and protocol fidelity
+- runnable evaluation code
+- reproduction checklist
+- verification report
+- reported metrics table
+- baseline snapshot
+- evidence snippets
+- optional judge prompt
 
 Useful options:
 
-- `--format json` for machine-readable output
-- `--verify-only` to emit only verification plus evidence instead of the full report
-- `--save-code` to persist the generated evaluation code
-- `--out` or `--save-report` to persist the rendered report
-- `--cache-only` to fail on cache misses instead of calling Upstage APIs
+- `--format json`
+- `--verify-only`
+- `--save-code`
+- `--out`
+- `--save-report`
+- `--cache-only`
 
-Both commands support `--format json`. The JSON payload includes the structured summary, evidence records with provenance, verification object, and rendered markdown.
+### Install bundled skills
 
-### Install skills into a project
+Install into the current project:
 
 ```bash
 upstage-research install --skills
 ```
 
-This copies the bundled skills to:
-
-```text
-.claude/skills/upstage-research/
-```
-
-To install into multiple agent-specific project paths:
+Install into multiple agent-specific targets:
 
 ```bash
 upstage-research install --skills --all-targets
 ```
 
-Or choose explicit targets:
+Or explicitly:
 
 ```bash
 upstage-research install --skills --targets claude,codex,cursor
 ```
 
-You can also preview the install without copying:
-
-```bash
-upstage-research install --skills --all-targets --dry-run
-```
-
-### Run a regression batch
+### Run regression batches
 
 ```bash
 upstage-research regression-batch tmp/papers \
@@ -182,14 +298,7 @@ upstage-research regression-batch tmp/papers \
   --resume
 ```
 
-This writes:
-
-- `eval/summary.tsv` with compile/run/manual-review/verification counts plus fidelity subscores
-- `analyze/summary.tsv` with application-point counts, evidence-ref counts, and anchored-evidence counts
-- Per-paper markdown/python artifacts and per-batch methodology reports
-- Per-paper / per-batch JSON artifacts that can be reused with `--resume`
-
-For a fixed fixture set with golden assertions:
+Fixed fixture example:
 
 ```bash
 upstage-research regression-batch \
@@ -199,9 +308,7 @@ upstage-research regression-batch \
   --cache-only
 ```
 
-This also writes `summary.json` for CI parsing and fails with a non-zero exit code if thresholds or golden snapshots do not match.
-
-To separate release readiness from hard protein-geometry generalization:
+Release-gate vs challenge split:
 
 ```bash
 upstage-research regression-batch \
@@ -216,80 +323,52 @@ upstage-research regression-batch \
   --cache-only
 ```
 
-`release-gate-main-47` excludes the three bad corpus slots that turned out not to be target biology papers.
-`bio-challenge-3` keeps real protein-design and structure-generation papers in a separate challenge set so they improve long-term generalization without distorting launch gates.
-
 ### Clear cache
 
 ```bash
 upstage-research cache-clear document-parse --dry-run
 ```
 
-Omit the namespace to clear the entire local cache directory.
+---
 
-## API pipeline
+## Pipeline
 
 ### `analyze-methods`
 
-1. Document Parse converts each paper PDF into structured markdown.
-2. Information Extract fills `skills/paper-method-analyzer/references/method-schema.json`.
-3. Solar-backed structured synthesis generates application suggestions, per-paper relevance notes, and reading priority limited to the provided papers.
-4. Local evidence-snippet selection surfaces supporting passages from the parsed markdown.
-5. Local stabilization rewrites overly broad adaptation text into dataset/metric/training-grounded reuse patterns for mixed-domain batches.
-6. If structured synthesis fails, the CLI falls back to heuristic comparison and priority generation instead of returning nothing.
+1. Document Parse turns each paper into structured markdown.
+2. Information Extract fills the method schema.
+3. Solar performs structured synthesis for comparison and adaptation.
+4. Local evidence selection grounds the output.
+5. Local stabilization rewrites overly broad suggestions into more defensible reuse patterns.
 
 ### `eval-codegen`
 
-1. Document Parse extracts the experiment-oriented markdown.
-2. Information Extract fills `skills/paper-eval-codegen/references/eval-schema.json`.
-3. Solar-backed structured guidance and metric-family resolution feed a deterministic Python evaluation artifact generator and an optional judge prompt renderer.
-4. A local semantic verifier scores metric-family coverage, evidence grounding, and baseline extraction quality.
-5. The verifier also emits metric / dataset / baseline / evidence / protocol subscores for release gating and regression tracking.
-6. Local evidence-snippet selection exposes supporting experiment passages with page / section / anchor provenance, and repeated API calls are cached.
+1. Document Parse extracts experiment-oriented markdown.
+2. Information Extract fills the evaluation schema.
+3. Solar provides structured guidance.
+4. Local metric-family resolution and deterministic rendering generate the Python artifact.
+5. Local verification scores fidelity across metric / dataset / baseline / evidence / protocol dimensions.
 
-## Implementation notes
+---
 
-- Node.js 18+ compatible
-- Uses `commander` for the CLI
-- Uses native `fetch` in the TypeScript client
-- Uses the Python `openai` SDK in skill scripts for Information Extract and Solar calls
-- Retries Document Parse with the async endpoint for larger files or sync failures
-- Sends progress logs to stderr so stdout stays clean markdown
-- Uses the official Upstage v2 file-upload plus `responses` flow for Information Extract
-- Caches Document Parse, Information Extract, and Solar outputs in `.upstage-research-cache/` by default
-- Supports `--cache-only` so regression or smoke runs can prove they never leave the local cache
-- Includes request timeout and transient retry handling for parse / extract / Solar calls
-- Deduplicates in-flight API requests inside the same process so concurrent batches do not refetch identical work
-- Supports resumable regression batches by reusing existing JSON artifacts with `--resume`
-- Uses bounded concurrency for multi-paper methodology analysis; tune with `UPSTAGE_RESEARCH_CONCURRENCY`
-- Externalizes task/domain discovery and evidence alias registries into `config/*.json` so new paper families can be tuned without patching core TypeScript logic
-- Externalizes most name-driven metric-family mapping rules into `config/metric-kind-registry.json`, leaving only formula-sensitive or task-sensitive edge cases in code
-- Attaches parse-anchor provenance from Document Parse raw elements to evidence records, including page, section, category, element id, and normalized coordinates when available
-- Uses deterministic rendering for the main Python evaluation artifact so generated code is less likely to contain undefined helpers or irrelevant generic metrics
-- Includes broader built-in coverage for common experimental metric families such as AP/mAP, ranking and retrieval metrics, forecasting metrics, calibration metrics, pass@k, WER/CER, PSNR/SSIM, correlation metrics, edit similarity, normalized scores, entropy-style RL metrics, and protein-sequence recovery
-- Includes approximation families for paper-shaped metrics such as `ITER`, `RUSE`, `YiSi-1`, and DQN-style maximum state-value monitoring when the extracted formula supports them
-- Uses Solar conservatively to re-map unresolved metrics onto safe built-in metric families when the paper evidence is strong enough
-- Keeps paper-specific metrics explicit when the paper defines a protocol that cannot be recovered safely from text alone
+## Technical highlights
 
-## Skill scripts
+- Node.js 18+
+- `commander`-based CLI
+- native `fetch` client
+- official Upstage v2 file-upload plus `responses` flow for IE
+- deterministic rendering for common evaluation families
+- evidence provenance from parse elements
+- local cache under `.upstage-research-cache/`
+- retry / timeout / async parse fallback
+- resumable regression batches
+- registry-driven metric and evidence normalization
 
-The bundled skill scripts are useful when an agent wants to debug one stage directly:
+---
 
-```bash
-python3 skills/paper-method-analyzer/scripts/analyze.py paper1.pdf paper2.pdf
-python3 skills/paper-eval-codegen/scripts/parse_experiments.py paper.pdf --output experiment.md
-python3 skills/paper-eval-codegen/scripts/generate_eval.py experiment.md --include-prompt
-```
+## Validation
 
-Python script dependencies:
-
-```bash
-pip install openai requests
-```
-
-## Validation status
-
-Static validation is available locally with:
+Local static validation:
 
 ```bash
 npm run check
@@ -298,3 +377,17 @@ npm run regression:public-hardening:assert
 ```
 
 Live Upstage validation should be run with a real API key when you want to verify extraction quality against actual PDFs.
+
+---
+
+## Package contents
+
+This npm package contains:
+
+- the CLI runtime
+- both bundled skills
+- config registries
+- regression fixtures
+- Python helper scripts used by the skills
+
+So this is one npm package that distributes two Agent Skills plus the CLI that powers them.
